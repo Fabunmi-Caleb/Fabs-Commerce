@@ -1,0 +1,73 @@
+BACKEND ANYTHING
+*** First of i need to know how my data is going to look like, 
+so setting up the data structure for the following parts of the webapp.
+*** Major Parts of the web app
+1 Users - split into normal users and admin users
+2 Product  
+3 Cart 
+First setup the backend api for CRUD operations on these 3 parts.
+For Filtering and sorting, i can sort based on: 
+1 Cateogry (no need for this anymore since there are dedicated routes for each category)
+2 Price 
+3 Brand 
+4 Color
+
+Thinking of the things i need to validate (it'll be mainly post and put requests sha 
+since its most for creating and updating stuff that you have to make sure its validated).
+1 Products would most likely need validation 
+2 Category 
+3 Cart 
+4 Order 
+5 User 
+
+Things to take note about later:
+1 Review error responses for sensitive information like stack traces or SQL errors.
+2 Send generic error messages to clients (e.g., “Something went wrong.”).
+3 Log detailed errors only on the server side.
+4 On the client side during registration, make sure you remove everything after @ and add the gmail.com manually 
+
+Note (Errors):
+1. I should have made the address field a single string and not an obect because on the frontend there are too many fields
+and it was not looking very nice and it would have been much less stressful in basic terms
+
+FRONTEND ANYTHING
+1 Explaining the two roles the square brackets play in the code below: (found in signup.sx in the "handleAddressDataChange function")
+CODE: 
+  // Handle address field changes
+       const isShipping = id.startsWith("ship-"); // Check if it's for shipping address
+       const fieldName = isShipping ? id.replace("ship-", "") : id; //remove the ship prefix because in the backend model, there is no ship prefix
+ 
+       setAddressData((addressData) => ({
+         ...addressData,
+         [isShipping ? "shippingAddress" : "address"]: { 
+          //below, the square brackets are used to access the value(s) in the obect using the name, so here (if shippingAddress was true) it evaluates to ...addressData["shippingAddress"]
+          //which is essentially the same thing as ...addressData.shippingAddress. So the square brackets here serve two distinct and different purposes
+           ...addressData[isShipping ? "shippingAddress" : "address"], //e.g. if it was shipping address, this would essentially be the same thing as ...addressData.shippingAddress
+           [fieldName]: value,
+         },
+       }));
+
+Scenario: 1
+[isShipping ? "shippingAddress" : "address"]
+Here the square brackets are used to dynamically set a key name (either shippingAddress or address).
+The brackets evaluate and tells avascript that its not ust a string but a key name for the obect which is addressData in this case.
+E.g. if isShipping is true: it evaluates to : ["shippingAddress"] which eventually becomes shippingAddress - not a string anymore but a property name / key for the addressData obect
+Its basically the same thing or case for this -[fieldName]: value , we are telling avascript this filedname (which will eventually be evaluated to something like "street" or "city) is not a string anymore but represents a property name / key 
+
+
+Scenario 2
+...addressData[isShipping ? "shippingAddress" : "address"]
+firstly, remember that in avascript, you can access property values using . (dot syntax) or []. (square bracket syntax) e.g:
+const cat = {name: "Cat 1", age: 12}, doing cat.name is the same thing as doing cat["name"].
+So that's essentially what is happening in this Scenario, the square brackets are being used to access the values in the addressData aobet using the key name (that will be either address or shippingAddress). 
+E.g. if isShipping is true: it evaluates to ...addressData["shippingAddress"] which is the same thing as ...addressData.shippingAddress which ust spreads the values in the previous "shippingAddress" into the new "shippingAddress" obect.
+
+The square brackets in these 2 Scenarios do different things, the first one is associated with telling avascript that the string inside the brackets (either "address" or "shippingAddress") is to be evaluated as a property name / key
+and the second one is used to get the value(s) from the "addressData" obect using the "shippingAddress" key / property name.
+
+What to do:
+1 *When a user logs in, remove the signup and login buttons and put the logout button*. make sure you add the functionality for that as well
+2 Check all the various scenarios of a user signing up 
+3 Add a toast of "Signup successful" and redirect the user to the homepage when the user successfully signs up
+4 Maybe - separate the password visibility function to its own file 
+5 Style the login page when done with everything functionality of login and signup 

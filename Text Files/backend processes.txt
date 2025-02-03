@@ -1,0 +1,33 @@
+BACKEND:
+
+Created folder structure. 
+Setup basic routes 
+Connected to Mongo DB
+Created all the initial models
+Created CRUD for categories since i needed categories to be able to make products
+Implemented CRUD for products cause i wanted to see how i would implement it with the categories i had just done
+Implemented CRUD for users.
+Implemented CRUD for cart (more difficult than i was expecting but we thank God).
+Worked on CRUD for Ratings (added it as part of the product routes instead of making it it's own model).
+Implemented Authentication.
+Added Admin Features (like product and category creation)
+Updated the cart to allow guest users have and maintain a cart and made sure to merge the carts as well
+Seeded the Database with products (add brands so you can sort them with brands, || didnt add brands at the end of the day sha)
+Made Dedicated routes for clothing, gadgets and food so you can access all the products under them
+Implemented Filtering with a price range and colors, (maybe add sorting by high to low price and vice versa and also sort by ratings?)
+Added Product Search 
+Implemented Payments and checkout, didn't use a payment gateway like stripe sha its just a sort of simulation.
+Tushen up the order confirmation email, make it look finer than what it is right now.
+Check Validations, Check for XSS and cross site scripting attacks if it pertains to the backend?
+Add Finishing Touches and confirm every route is working as intended?
+
+FINISHING TOUCHES:
+1 Added Login Rate Limits to avoid brute force login attacks and make sure a user can only login a small number of time before they are advised to try again later
+2 Integrated express-mongo-sanitize to ensure user input doesn't contain mongo special characters like ($ and .) to prevent mongo injections
+3 Integrated joi and sanitize-html for input validation and sanitization for all the fields.
+
+
+Make only Admins be able to create products and categories. 
+Maybe later add a seller under the roles for users for 
+them to also be able to add products.
+

@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Sign up page styles (Register.jsx)*/
+.signup{
+  background-color: #caf3df;
+  background-image: url("./assets/images/logo.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.signup input {
+  border: 1px solid rgb(214, 209, 209);
+  border-radius: 5px;
+  padding-left: 7px;
+  outline: none;
+}
+
+.signup input:focus{
+  border: 2px solid rgb(172, 167, 167);
+}
+
+.signup-section input{
+  border: 1px solid black;
+}

@@ -1,0 +1,6 @@
+FRONTEND: 
+
+Created folder structure
+Set up routing with react router dom
+Set up the login page (linking the backend and the frontend)
+Set up the signup page, checking almost all possible scenarios for wrong user data 

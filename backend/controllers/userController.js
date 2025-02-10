@@ -6,10 +6,10 @@ import bcrypt from "bcrypt";
 //createUser is basically the same as registering a new user.
 const createUser = async (req, res) => {
   const guestId = req.session.guestId; // check if the user was a guest, has added to cart and is now registering.
-  const { firstName, lastName, email, password, phone, useSameShip } = req.body;
+  const { firstName, lastName, email, password, useSameShip } = req.body;
 
   //Validate Required User Input
-  if (!firstName || !lastName || !email || !password || !phone) {
+  if (!firstName || !lastName || !email || !password) {
     return res.status(500).send("Please Input all required fields!!");
   }
 
@@ -19,11 +19,12 @@ const createUser = async (req, res) => {
     return res.status(400).send("User with that email already exists!");
   }
 
-  //Check if the phone number (if given) is unique
-  const phoneExists = await User.findOne({ phone });
-  if (phoneExists) {
-    return res.status(400).send("User with that phone number already exists!");
-  }
+  //removed the phone property so this is kinda useless
+  //Check if the phone number (if given) is unique 
+  // const phoneExists = await User.findOne({ phone });
+  // if (phoneExists) {
+  //   return res.status(400).send("User with that phone number already exists!");
+  // }
 
   // encrypting the password (THIS FUNCTIONALITY HAS BEEN MOVED TO THE USER MODEL IN THE 'PRE SAVE' MIDDLEWARE!)
   // const salt = await bcrypt.genSalt(10);

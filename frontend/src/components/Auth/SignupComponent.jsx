@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { usePasswordToggle } from "../../hooks/usePasswordToggle";
 import { useLoading } from "../../hooks/useLoading";
 import { useError } from "../../hooks/useError";
-import { IoEye } from "react-icons/io5";
-import { IoMdEyeOff } from "react-icons/io";
 import { registerUser } from "../../services/authService";
 import { useUser } from "../../context/UserContext";
+import { IoChevronForward } from "react-icons/io5";
+import { GoInfo } from "react-icons/go";
+import logo from "../../assets/images/logo.png";
+
 
 function SignupComponent() {
     const [basicData, setBasicData] = useState({
@@ -14,7 +16,6 @@ function SignupComponent() {
       lastName: "",
       email: "",
       password: "",
-      phone: "",
     });
     const [addressData, setAddressData] = useState({
       address: {
@@ -31,7 +32,8 @@ function SignupComponent() {
       },
       useSameShip: false,
     });
-    const {isPasswordVisible, togglePasswordVisibility} = usePasswordToggle();
+    const [addressVisible, setAddressVisible] = useState(false);
+    const {isPasswordVisible, togglePasswordVisibility, IoEye, IoMdEyeOff} = usePasswordToggle();
     const {loading , setLoading} = useLoading();
     const {error, setError} = useError();
     const {user, login} = useUser();
@@ -66,7 +68,6 @@ function SignupComponent() {
         lastName: "",
         email: "",
         password: "",
-        phone: "",
       });
       setAddressData({
         address: {
@@ -131,77 +132,141 @@ function SignupComponent() {
     }
 
     return (
-        <section className="signup-section">
-          <form onSubmit={handleUserRegistration}>
+    <section className="signup-section">
+      <div className="min-h-[100dvh] flex justify-center items-center bg-primary">
+        <div className="w-full max-w-[45rem] mx-3">
+          {/* Fabs Commerce Logo */}
+          <Link to="/" className="w-56 h-12 my-5 md:my-7 block mx-auto"> 
+            <img src={logo} alt="fabs-commerce logo" />
+          </Link>
+          <form onSubmit={handleUserRegistration} className="space-y-4 p-4 bg-white rounded-md">
+            
             {/* Basic Details */}
-            <div>
-              <h3>Basic Details</h3>
-              <label htmlFor="firstName">First Name *</label>
-              <input type="text" id="firstName" required value={basicData.firstName} onChange={handleBasicDataChange} />
-              <label htmlFor="lastName">Lastname *</label>
-              <input type="text" id="lastName" required value={basicData.lastName} onChange={handleBasicDataChange} />
+            <div className="">
+              <h3 className="text-lg font-medium mb-1">Basic Details:</h3>
+              <div className="md:flex md:space-x-10 md:space-y-0 space-y-2">
+                <div className="w-full">
+                  <label htmlFor="firstName">First Name <span className="text-red-500">*</span></label><br />
+                  <input type="text" id="firstName" className="w-full h-9 pl-2" required value={basicData.firstName} onChange={handleBasicDataChange} /><br />
+                </div>
+                <div className="w-full">
+                  <label htmlFor="lastName">Lastname <span className="text-red-500">*</span></label><br />
+                  <input type="text" id="lastName" className="w-full h-9 pl-2" required value={basicData.lastName} onChange={handleBasicDataChange} />
+                </div>
+              </div>
             </div>
-    
-            <br />
-    
+        
             {/* Login Details */}
-            <div>
-              <h3>Login Details</h3>
-              <label htmlFor="email">Email *</label>
-              <input type="email" id="email" required value={basicData.email} onChange={handleBasicDataChange} />
-              <label htmlFor="password">Password *</label>
-              <input type={isPasswordVisible ? "text" : "password"} id="password" required value={basicData.password} onChange={handleBasicDataChange} />
-              <button onClick={togglePasswordVisibility}>
-                  {isPasswordVisible ? <IoEye /> : <IoMdEyeOff />}
-              </button>
-              <label htmlFor="phone">Phone Number</label>
-              <input type="text" id="phone" required  value={basicData.phone} onChange={handleBasicDataChange}/>
+            <div className="">
+              <h3 className="text-lg font-medium mb-1">Login Details:</h3>
+              <div className="md:flex md:space-x-10 md:space-y-0 space-y-2">
+                <div className="w-full">
+                  <label htmlFor="email">Email <span className="text-red-500">*</span></label><br />
+                  <input type="email" id="email" className="w-full h-9 pl-2" required value={basicData.email} onChange={handleBasicDataChange} />
+                </div>
+                <div className="w-full md:h-[3.75rem]">
+                  <label htmlFor="password">Password <span className="text-red-500">*</span></label>
+                  <div className="flex border rounded-sm h-9">
+                    <input type={isPasswordVisible ? "text" : "password"} id="password" placeholder="At least 6 Characters" className="border-none w-full pl-2" required value={basicData.password} onChange={handleBasicDataChange} />
+                    <button onClick={togglePasswordVisibility} className="mx-2">
+                      {isPasswordVisible ? <IoEye /> : <IoMdEyeOff />}
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-    
-            <br />
-    
+        
             {/* Addresses */}
+          <div className={`border border-primary rounded-md transition-all duration-300 overflow-hidden ${addressVisible ? "md:max-h-[27rem] max-h-[44rem]": "max-h-[2.675rem]"}`}>
+            {/* Address Toggle */}
+            <div className="flex justify-between items-center p-2">
+              <h3 className="text-lg font-medium">Address Details:</h3>
+              <button onClick={(e)=> {e.preventDefault(), setAddressVisible(!addressVisible)}}>
+                 <IoChevronForward className={`transition-transform ${addressVisible ? "rotate-90 size-6" : "size-6"}`}/>
+              </button>
+            </div>
+
+          {/* Combined Addresses Div */}
+            <div className="space-y-3 px-2">
             {/* Home Address */}
-            <div>
-              <h3>Home Address Details</h3>
-              <label htmlFor="street">Street</label>
-              <input type="text" id="street" value={addressData.address.street} onChange={handleAddressDataChange}/>
-              <label htmlFor="state">State</label>
-              <input type="text" id="state" value={addressData.address.state} onChange={handleAddressDataChange}/>
-              <label htmlFor="city">City</label>
-              <input type="text" id="city" value={addressData.address.city} onChange={handleAddressDataChange}/>
-              <label htmlFor="country">Country</label>
-              <input type="text" id="country" value={addressData.address.country} onChange={handleAddressDataChange}/>
+            <div className="">
+              <h3 className="text-lg font-medium mb-1 flex">Home Address: <GoInfo className="md:block md:size-[18px] md:ml-1 md:cursor-pointer hidden" title="Home Address is not required but all fields must be filled if you decide to fill it" /> </h3>
+              {/* Street and State Div */}
+              <div className="md:flex md:space-x-10 md:space-y-0 space-y-2">
+                <div className="w-full">
+                  <label htmlFor="street">Street</label><br />
+                  <input type="text" id="street" className="w-full h-9 pl-2" value={addressData.address.street} onChange={handleAddressDataChange}/>
+                </div>
+                <div className="w-full">
+                  <label htmlFor="state">State</label><br />
+                  <input type="text" id="state" className="w-full h-9 pl-2" value={addressData.address.state} onChange={handleAddressDataChange}/>
+                </div>
+              </div>
+              {/* City and Country Div */}
+              <div className="md:flex md:space-x-10 md:space-y-0 mt-3 space-y-2">
+                <div className="w-full">
+                  <label htmlFor="city">City</label>
+                  <input type="text" id="city" className="w-full h-9 pl-2" value={addressData.address.city} onChange={handleAddressDataChange}/>
+                </div>
+                <div className="w-full">
+                  <label htmlFor="country">Country</label>
+                  <input type="text" id="country" className="w-full h-9 pl-2" value={addressData.address.country} onChange={handleAddressDataChange}/>
+                </div>
+              </div>
             </div>
-    
-            <br />
-    
+        
             {/* Shipping Address */}
-            <div>
-              <h3>Shipping Address Details</h3>
-              <input type="checkbox" name="" id="useSameShip" checked={addressData.useSameShip} onChange={handleAddressDataChange} />
-              <label htmlFor="useSameShip">
-                Use home address as shipping address
-              </label>
-              <br />
-              <label htmlFor="ship-street">Street</label>
-              <input type="text" id="ship-street" value={addressData.shippingAddress.street} onChange={handleAddressDataChange} disabled={addressData.useSameShip}/>
-              <label htmlFor="ship-state">State</label>
-              <input type="text" id="ship-state" value={addressData.shippingAddress.state} onChange={handleAddressDataChange} disabled={addressData.useSameShip}/>
-              <label htmlFor="ship-city">City</label>
-              <input type="text" id="ship-city" value={addressData.shippingAddress.city} onChange={handleAddressDataChange} disabled={addressData.useSameShip}/>
-              <label htmlFor="ship-country">Country</label>
-              <input type="text" id="ship-country" value={addressData.shippingAddress.country} onChange={handleAddressDataChange} disabled={addressData.useSameShip}/>
+            <div className="">
+              <h3 className="text-lg font-medium flex">Shipping Address: <GoInfo className="md:block md:size-[18px] md:ml-1 md:cursor-pointer hidden" title="Shipping Address is not required but all fields must be filled if you decide to fill it" /></h3>
+              <div className="flex items-center space-x-1 my-2">
+                <input type="checkbox" name="" id="useSameShip" className="hover:cursor-pointer size-[0.9rem]" checked={addressData.useSameShip} onChange={handleAddressDataChange} />
+                <label htmlFor="useSameShip" className="hover:cursor-pointer font-medium">Use home address as shipping address</label>
+              </div>
+              {/* Shipping Street and State Div */}
+              <div className="md:flex md:space-x-10 md:space-y-0 space-y-2">
+                <div className="w-full">
+                  <label htmlFor="ship-street">Street</label><br />
+                  <input type="text" id="ship-street" className={addressData.useSameShip ? "cursor-not-allowed w-full h-9 pl-2" : "w-full h-9 pl-2"} value={addressData.shippingAddress.street} onChange={handleAddressDataChange} disabled={addressData.useSameShip}/>
+                </div>
+                <div className="w-full">
+                  <label htmlFor="ship-state">State</label><br />
+                  <input type="text" id="ship-state" className={addressData.useSameShip ? "cursor-not-allowed w-full h-9 pl-2" : "w-full h-9 pl-2"} value={addressData.shippingAddress.state} onChange={handleAddressDataChange} disabled={addressData.useSameShip}/>
+                </div>
+              </div>
+              {/* Shipping City and Country Div */}
+              <div className="md:flex md:space-x-10 md:space-y-0 mt-3 mb-5 space-y-2">
+                <div className="w-full">
+                  <label htmlFor="ship-city">City</label>
+                  <input type="text" id="ship-city" className={addressData.useSameShip ? "cursor-not-allowed w-full h-9 pl-2" : "w-full h-9 pl-2"} value={addressData.shippingAddress.city} onChange={handleAddressDataChange} disabled={addressData.useSameShip}/>
+                </div>
+                <div className="w-full">
+                  <label htmlFor="ship-country">Country</label>
+                  <input type="text" id="ship-country" className={addressData.useSameShip ? "cursor-not-allowed w-full h-9 pl-2" : "w-full h-9 pl-2"} value={addressData.shippingAddress.country} onChange={handleAddressDataChange} disabled={addressData.useSameShip}/>
+                </div>
+              </div>
+            </div> 
+      
+          </div>
+          </div>
+          
+          <div className="flex flex-col items-center space-y-10">
+            <div className="w-full flex flex-col items-center space-y-4 mt-3">
+            <button className="md:w-1/2 w-full h-9 rounded-md font-medium bg-primary text-white hover:bg-[#70cc9f] hover:transition-all focus:bg-[#66bd93]">{loading? "Signing Up..." : "Sign Up"}</button>
+            {/* Error Message */}
+            <p className="text-red-500 font-medium">
+              {error ? `Signup Error: ${error}`: ""}
+            </p>
+            <p className="font-medium border border-[#6ecc9f] p-2 rounded-3xl">Already have an account?{" "}<Link to="/login" className="text-[#6ecc9f]">Login</Link></p>
             </div>
-    
-            <br />
-    
-            <button className="border">{loading? "Signing Up..." : "Sign Up"}</button>
-            <p>Already have an account?{" "}<Link to="/login" className="text-blue-700">Login</Link></p>
-            <Link to="/" className="text-blue-700">Go back home</Link>
+          </div>
           </form>
-        </section>
-      );
+          <div className={`text-center mt-8 ${addressVisible ? "mb-4" : ""}`}>
+            <a href="https://github.com/Fabunmi-Caleb" target="_blank" className="font-medium text-lg">&#169; 2025 Fabunmi Ibukunoluwa Caleb</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    );
 }
 
 export default SignupComponent

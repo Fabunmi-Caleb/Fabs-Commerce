@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { getCurrentUser } from "../services/authService";
+import { useError } from "../hooks/useError";
 
 const UserContext = createContext();
 
@@ -8,6 +9,7 @@ export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const {error, setError} = useError();
   const isLoggedIn = localStorage.getItem("isLoggedIn");
 
   const login = (userData) => {
@@ -22,15 +24,16 @@ export const UserProvider = ({ children }) => {
 
   const checkSession = async () => {
     try {
-      if(!isLoggedIn){
-        return false;  // Skip the request if the user is not logged in
-      } 
-        const response = await getCurrentUser();
-        setUser(response.data);
+      if (!isLoggedIn) {
+        logout();
+        return false; // Skip the request if the user is not logged in
+      }
+      const response = await getCurrentUser();
+      setUser(response.data);
     } catch (err) {
-      setUser(null);
-      localStorage.removeItem("isLoggedIn");
-      console.error(`Error fetching session: ${err}`);
+      logout();
+      setError(err.response ? err.response : err);
+      console.error("Error fetching session");
     }
   };
 

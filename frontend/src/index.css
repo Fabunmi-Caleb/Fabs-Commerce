@@ -23,5 +23,6 @@
 }
 
 .signup-section input{
-  border: 1px solid black;
+  border-width: 1px;
+  border-radius: 0.125rem;
 }

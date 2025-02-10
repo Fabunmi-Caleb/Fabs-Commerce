@@ -11,5 +11,6 @@ router.post("/login", validators.validateUserLogin, loginRateLimiter, wrapAsync(
 router.post("/logout", requireLogin, wrapAsync(authControllers.logout));
 router.post("/guestLogout", wrapAsync(authControllers.guestLogout));
 router.get("/check-session", requireLogin, wrapAsync(authControllers.checkSession));
+router.get("/destroy-session", requireLogin, wrapAsync(authControllers.destroySession));
 
 export { router };

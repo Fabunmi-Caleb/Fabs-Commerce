@@ -36,6 +36,7 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   const user = await User.findById(req.session.user.id);
+  if(!user) return res.status(404).send("User not found!")
   try {
     // req.session.user = null; alternative way to remove the session but the destroy method is preferred
     req.session.destroy((err) => {
@@ -83,4 +84,23 @@ const checkSession = async (req, res) => {
   }
 };
 
-export { login, logout, guestLogout, checkSession };
+const destroySession = async (req, res) => {
+  const user = await User.findById(req.session.user.id);
+  if (!user) return res.status(404).send("User Not Found");
+  try {
+    // req.session.user = null; alternative way to remove the session but the destroy method is preferred
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Session Clearing Failed" });
+      }
+      res.clearCookie("connect.sid");
+      res.status(200).json({
+        message: "Successfully Cleared Session",
+      });
+    });
+  } catch (e) {
+    res.status(501).send(`Error: ${e.message} ${e.stack}`);
+  }
+}
+
+export { login, logout, guestLogout, checkSession, destroySession };

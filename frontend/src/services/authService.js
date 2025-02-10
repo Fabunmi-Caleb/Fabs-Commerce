@@ -1,4 +1,4 @@
-import { axiosWithCredentials, axiosHandle401 } from "../utils/axiosMods.js";
+import { axiosWithCredentials } from "../utils/axiosMods.js";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -11,8 +11,12 @@ export const userLogout = () => {
 };
 
 export const getCurrentUser = () => {
-  return axiosHandle401.get(`${apiUrl}/auth/check-session`);
+  return axiosWithCredentials.get(`${apiUrl}/auth/check-session`);
 };
+
+export const removeSession = () => {
+  return axiosWithCredentials.get(`${apiUrl}/auth/destroy-session`);
+}
 
 export const registerUser = (userData) => {
   return axiosWithCredentials.post(`${apiUrl}/user`, userData);

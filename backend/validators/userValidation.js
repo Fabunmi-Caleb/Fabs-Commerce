@@ -5,7 +5,7 @@ const userRegistrationSchema = joi.object({
   lastName: joi.string().max(50).sanitizeHtml().required(),
   email: joi.string().email().sanitizeHtml().required(),
   password: joi.string().min(6).sanitizeHtml().required(),
-  phone: joi.string().pattern(/^[\+]?[0-9-]+$/).length(11),
+  // phone: joi.string().pattern(/^[\+]?[0-9-]+$/).length(11),
   address: joi.object({
     street: joi.string().max(30).sanitizeHtml().required(),
     city: joi.string().max(30).sanitizeHtml().required(),

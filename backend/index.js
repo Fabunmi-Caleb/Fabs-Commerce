@@ -57,7 +57,8 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      maxAge: 1000 * 60 * 1, // 15 minutes of session duration
+      maxAge: 1000 * 60 * 30, // 30 minutes of session duration
+      //prod stuff (check when you want to push to prod)
       // secure: false,  // Set to `true` if using HTTPS
       // sameSite: "none" // For cross-origin requests (use 'Lax' or 'Strict' for same-origin)
     },

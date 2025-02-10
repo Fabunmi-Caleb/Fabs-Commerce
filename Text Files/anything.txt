@@ -71,3 +71,7 @@ What to do:
 3 Add a toast of "Signup successful" and redirect the user to the homepage when the user successfully signs up
 4 Maybe - separate the password visibility function to its own file 
 5 Style the login page when done with everything functionality of login and signup 
+
+*I still have the issue of a 401 error appearing because the user is not logged in and my useEffect is trying to access the 
+protected check-session route*.
+*Little risky because im using local storage, if a user tampers with it, for example sets it to false, then they can essentially make it look like they are logged out removing the users data from the page when in reality they are still logged in and their session is intact

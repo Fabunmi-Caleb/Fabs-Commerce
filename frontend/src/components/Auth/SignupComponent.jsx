@@ -87,8 +87,11 @@ function SignupComponent() {
 
       navigate("/")
     } catch (err) {
-        setError(err.response?.data || "An error occurred. Please try again.");
-        console.error("Registration failed:", err.response?.data || err.message);
+        if(!err.response){
+          setError('Network Error: Unable to reach the server. Please try again later.');
+        }
+        setError(err ? err : "An error occurred. Please try again.");
+        // console.error("Registration failed:", err.response?.data || err.message);
     }finally{
         setLoading(false);
     }
@@ -254,7 +257,10 @@ function SignupComponent() {
             <button className="md:w-1/2 w-full h-9 rounded-md font-medium bg-primary text-white hover:bg-[#70cc9f] hover:transition-all focus:bg-[#66bd93]">{loading? "Signing Up..." : "Sign Up"}</button>
             {/* Error Message */}
             <p className="text-red-500 font-medium">
-              {error ? `Signup Error: ${error}`: ""}
+              {error 
+                ? error.response ? `Signup Error: ${error.response.data}` : "Network Error. Please try again later" 
+                : ""
+              }
             </p>
             <p className="font-medium border border-[#6ecc9f] p-2 rounded-3xl">Already have an account?{" "}<Link to="/login" className="text-[#6ecc9f]">Login</Link></p>
             </div>

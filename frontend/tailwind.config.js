@@ -10,6 +10,9 @@ export default {
         primary: "#8be7bb", //2eb875
         secondary: "orange",
       },
+      screens: {
+        "screen570": '570px', // Custom breakpoint for 570px
+      },
     },
   },
   plugins: [],

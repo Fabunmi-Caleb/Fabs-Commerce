@@ -109,7 +109,7 @@ const changePassword = async (req, res) => {
 const updateUser = async (req, res) => {
   const id = req.params.id; // grab the users id from the session
   try {
-    const { email, phone } = req.body;
+    const { email, phone, useSameShip } = req.body;
 
     //Check if User Already Exists (to know if he can change his email to that new email)
     const userExists = await User.findOne({ email });
@@ -117,13 +117,14 @@ const updateUser = async (req, res) => {
       return res.status(500).send("User with that email already exists!");
     }
 
+    // PHONE FUNCTIONALITY OBSOLETE BECAUSE IT HAD BEEN REMOVED AS A USER PARAMETER FROM THE DB
     //Check if the phone number (if given) is unique
-    const phoneExists = await User.findOne({ phone });
-    if (phoneExists) {
-      return res
-        .status(500)
-        .send("User with that phone number already exists!");
-    }
+    // const phoneExists = await User.findOne({ phone });
+    // if (phoneExists) {
+    //   return res
+    //     .status(500)
+    //     .send("User with that phone number already exists!");
+    // }
 
     //this route should not be where a user can change his/her password so exclude it from the req.body;
     const { password, ...updateData } = req.body;
@@ -132,13 +133,13 @@ const updateUser = async (req, res) => {
       runValidators: true,
       new: true,
     });
+    if (useSameShip) updatedUser.shippingAddress = { ...updatedUser.address };
+    await updatedUser.save();
     res.status(200).json({
       fullName: `${updatedUser.firstName} ${updatedUser.lastName}`,
       email: updatedUser.email,
-      phone: updatedUser.phone,
       address: updatedUser.address,
       shippingAddress: updatedUser.shippingAddress,
-      role: updatedUser.role,
     });
   } catch (e) {
     res.status(501).send(`Error: ${e.message} ${e.stack}`);

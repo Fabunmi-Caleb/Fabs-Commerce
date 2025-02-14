@@ -10,13 +10,11 @@ import {
 import { FaXTwitter } from "react-icons/fa6";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { AiOutlineLogout } from "react-icons/ai"; //put logoout in the profile section
-import { useAuth } from "../hooks/authHook.js";
 import { toast } from "react-toastify";
 import { useUser } from "../context/UserContext.jsx";
 import LogoutComponent from "../components/Auth/LogoutComponent.jsx";
 
 const RootLayout2 = () => {
-  const { isLoggedIn, logout } = useAuth();
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleLogout = async (e) => {

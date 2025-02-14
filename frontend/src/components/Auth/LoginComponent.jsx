@@ -33,7 +33,11 @@ function LoginComponent() {
 
       navigate("/");
     } catch (err) {
-      setError(err.response ? err.response : "An error occurred. Please try again.");
+      if(!err.response){
+        setError('Network Error: Unable to reach the server. Please try again later.');
+      }
+      setError(err ? err : "An error occurred. Please try again.");
+      // console.error(err.response);
     }finally{
       setLoading(false);
     }
@@ -64,7 +68,14 @@ function LoginComponent() {
         <div>
           <button type="submit" disabled={loading} className="bg-primary text-white font-semibold w-full h-9 rounded-md hover:bg-[#70cc9f] hover:transition-all focus:bg-[#66bd93]">{loading ? "Logging In..." : "Login"}</button>
           {/* Error Message */}
-          <p className="text-red-500 text-center mt-2 font-medium">{error ? error.status===429 ? "Too many login requests, please try again later" : "Invalid Login Credentials" : ""}</p>
+          <p className="text-red-500 text-center mt-2 font-medium">
+            {error 
+              ? error.response 
+              ? error.response.status === 429 ? "Too many login requests, please try again later" : "Invalid Login Credentials"  
+              : "Network Error. Please try again later"
+              : ""
+            }
+          </p>
         </div>
       </form>
       <p className="border border-[#6ecc9f] font-medium p-2 max-w-[16.2rem] mx-auto rounded-3xl">New to fabs commerce? <Link to="/signup" className="text-[#6ecc9f] ml-1">Sign Up</Link></p>

@@ -2,26 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Sign up page styles (Register.jsx)*/
-.signup{
-  background-color: #caf3df;
-  background-image: url("./assets/images/logo.png");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
+/* Active Navlink */
+.active{
+  border-bottom: 3px solid #8be7bb;
 }
 
-.signup input {
-  border: 1px solid rgb(214, 209, 209);
-  border-radius: 5px;
-  padding-left: 7px;
-  outline: none;
-}
+/* Root Layout Styles */
+/* .shop-categories a:hover, .auth-navlinks a:hover{
+  border-bottom: 3px solid #8be7bb;
+  transition: border-bottom 0.1s;
+} */
 
-.signup input:focus{
-  border: 2px solid rgb(172, 167, 167);
-}
-
+/* Signup Styles */
 .signup-section input{
   border-width: 1px;
   border-radius: 0.125rem;
